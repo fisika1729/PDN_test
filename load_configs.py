@@ -129,16 +129,42 @@ def configure(load, config):
 
 
 def run(load, config):
-    load.write("TRAN ON")
-    load.write("INP ON")
-    load.write("TRIG:SOUR HOLD")
-    load.write("FORC:TRIG")
 
-    print("Load transient running")
+    duration = config["duration"]
 
-    time.sleep(config["duration"])
+    print("\nStarting transient test...")
 
-    load.write("TRAN OFF")
-    load.write("INP OFF")
+    try:
 
-    print("Load transient completed")
+        load.write("INP ON")
+
+        load.write("TRAN ON")
+
+        load.write("TRIG:SOUR HOLD")
+
+        load.write("FORC:TRIG")
+
+        print("Transient running...")
+
+        start = time.time()
+
+        while time.time() - start < duration:
+
+            elapsed = time.time() - start
+            print(f"\rElapsed : {elapsed:.1f}s / {duration}s", end="")
+
+            time.sleep(0.2)
+
+        print()
+
+    except KeyboardInterrupt:
+
+        print("\nTransient interrupted.")
+
+    finally:
+
+        load.write("TRAN OFF")
+
+        load.write("INP OFF")
+
+        print("Transient stopped.")

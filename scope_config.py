@@ -31,3 +31,44 @@ def connect(rm):
             continue
 
     raise RuntimeError("Keysight DSOX6004A not found")
+
+
+def configure(scope):
+
+    print("\nConfiguring Oscilloscope...")
+
+    scope.write("*RST")
+    scope.query("*OPC?")
+
+    scope.write(":STOP")
+    scope.query("*OPC?")
+
+    scope.write(":CHAN1:DISP ON")
+    scope.write(":CHAN1:COUP DC")
+    scope.write(":CHAN1:PROB 10")
+
+    scope.write(":CHAN1:SCAL 500E-3")
+    scope.write(":CHAN1:OFFS 0")
+
+    scope.write(":TIM:SCAL 1E-3")
+
+    scope.write(":ACQ:TYPE NORM")
+    scope.write(":ACQ:POIN 100000")
+
+    scope.write(":TRIG:EDGE:SOUR CHAN1")
+    scope.write(":TRIG:EDGE:SLOP POS")
+    scope.write(":TRIG:LEV 3.2")
+
+    scope.query("*OPC?")
+
+    print("Oscilloscope configured.")
+
+
+def arm(scope):
+
+    print("\nArming Oscilloscope...")
+
+    scope.write(":SINGLE")
+    scope.query("*OPC?")
+
+    print("Oscilloscope armed and waiting for trigger.")
