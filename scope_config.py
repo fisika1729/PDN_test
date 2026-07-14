@@ -33,7 +33,7 @@ def connect(rm):
     raise RuntimeError("Keysight DSOX6004A not found")
 
 
-def configure(scope):
+def configure(scope, trigger_level=3.2):
 
     print("\nConfiguring Oscilloscope...")
 
@@ -43,21 +43,23 @@ def configure(scope):
     scope.write(":STOP")
     scope.query("*OPC?")
 
-    scope.write(":CHAN1:DISP ON")
-    scope.write(":CHAN1:COUP DC")
-    scope.write(":CHAN1:PROB 10")
+    scope.write(":CHANnel1:DISPlay ON")
+    scope.write(":CHANnel1:COUPling DC")
+    scope.write(":CHANnel1:PROBe 10")
 
-    scope.write(":CHAN1:SCAL 500E-3")
-    scope.write(":CHAN1:OFFS 0")
+    scope.write(":CHANnel1:SCALe 500E-3")
+    scope.write(":CHANnel1:OFFSet 0")
 
-    scope.write(":TIM:SCAL 1E-3")
+    scope.write(":TIMebase:SCALe 1E-3")
 
-    scope.write(":ACQ:TYPE NORM")
-    scope.write(":ACQ:POIN 100000")
+    scope.write(":ACQuire:TYPE NORM")
+    scope.write(":ACQuire:POINts 100000")
 
-    scope.write(":TRIG:EDGE:SOUR CHAN1")
-    scope.write(":TRIG:EDGE:SLOP POS")
-    scope.write(":TRIG:LEV 3.2")
+    scope.write(":TRIGger:EDGE:SOURce CHANnel1")
+    scope.write(":TRIGger:EDGE:SLOPe POSitive")
+
+    if trigger_level is not None:
+        scope.write(f":TRIGger:LEVel {trigger_level}")
 
     scope.query("*OPC?")
 
