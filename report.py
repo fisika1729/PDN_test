@@ -35,10 +35,6 @@ def generate_report(
     time_axis = data["time"]
     voltage = data["voltage"]
 
-    # ----------------------------------------------------
-    # Generate waveform plot
-    # ----------------------------------------------------
-
     Path(output_pdf).parent.mkdir(parents=True, exist_ok=True)
 
     plot_file = Path(output_pdf).with_suffix(".png")
@@ -104,10 +100,6 @@ def generate_report(
     )
 
     plt.close()
-
-    # ----------------------------------------------------
-    # Create PDF
-    # ----------------------------------------------------
 
     doc = SimpleDocTemplate(output_pdf)
 
